@@ -1,32 +1,41 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <firstHeader />
+    <Users v-bind:users="users" />
   </div>
 </template>
 
+<script>
+import Users from "./components/Users";
+import firstHeader from "./components/firstHeader";
+import axios from "axios";
+
+export default {
+  name: "app",
+  components: {
+    firstHeader,
+    Users
+  },
+  data() {
+    return {
+      users: []
+    };
+  },
+  created() {
+    axios
+      .get("https://my-user-manager.herokuapp.com/users")
+      .then(res => (this.users = res.data))
+      // eslint-disable-next-line no-console
+      .catch(err => console.log(err));
+  }
+};
+</script>
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  margin: 0;
+  padding: 0;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 </style>
